@@ -1,5 +1,7 @@
 package models;
 
+import exceptions.UnprocessableEntity;
+
 public class PersonModel {
 
 	private int id;
@@ -26,7 +28,12 @@ public class PersonModel {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (name.equals("") || name == null) {
+			throw new NullPointerException("O nome não pode ser nulo!");
+		} else {
+			this.name = name;
+		}
+		
 	}
 
 	public String getLastName() {
@@ -34,7 +41,12 @@ public class PersonModel {
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		if (lastName.equals("") || lastName == null) {
+			throw new NullPointerException("O sobrenome não pode ser nulo!");
+		} else {
+			this.lastName = lastName;
+		}
+		
 	}
 
 }

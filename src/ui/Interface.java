@@ -18,6 +18,12 @@ import java.text.ParseException;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 
+import manager.EventManager;
+import models.PersonModel;
+import models.Room;
+import views.PersonView;
+import views.RoomView;
+
 
 public class Interface {
 
@@ -28,6 +34,9 @@ public class Interface {
 	private JTextField tfSobrenome;
 	private JTextField tfConsultarNome;
 	private JTextField tfConsultaSala;
+	private PersonView personView = new PersonView();
+	private JTextField tfCadastroCafe;
+	private RoomView roomView = new RoomView();
 	
 	/**
 	 * Launch the application.
@@ -97,6 +106,22 @@ public class Interface {
 		JButton btnCadastroSala = new JButton("Cadastrar");
 		btnCadastroSala.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
+				try {
+					int lotacao = Integer.parseInt(tfLotacaoSala.getText());
+					roomView.addRoom(tfNomeSala.getText(), lotacao);
+					JOptionPane.showMessageDialog(frame, "Sala cadastrada com sucesso!");
+				} catch (NullPointerException error) {
+					JOptionPane.showMessageDialog(frame, "Sala não cadastrada!");
+					
+				} catch (NumberFormatException error2) {
+					JOptionPane.showMessageDialog(frame, "Sala não cadastrada!");
+				}
+				
+				
+				
+				
 			}
 		});
 		btnCadastroSala.setBounds(252, 42, 101, 23);
@@ -108,6 +133,27 @@ public class Interface {
 		tabCadastroCafe.setForeground(Color.WHITE);
 		tabCadastroCafe.setBackground(Color.WHITE);
 		tabbedPane.addTab("Cadastrar Espaços de Café", null, tabCadastroCafe, null);
+		
+		JLabel lblCadatroCafe = new JLabel("Nome:");
+		lblCadatroCafe.setBounds(28, 30, 46, 14);
+		tabCadastroCafe.add(lblCadatroCafe);
+		
+		tfCadastroCafe = new JTextField();
+		tfCadastroCafe.setBounds(96, 27, 171, 20);
+		tabCadastroCafe.add(tfCadastroCafe);
+		tfCadastroCafe.setColumns(10);
+		
+		JButton btnCadastroCafe = new JButton("Cadastrar");
+		btnCadastroCafe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				roomView.addRoom(tfCadastroCafe.getText());
+				
+				
+			}
+		});
+		btnCadastroCafe.setBounds(323, 26, 89, 23);
+		tabCadastroCafe.add(btnCadastroCafe);
 		
         JLayeredPane tabCadastroPessoa = new JLayeredPane();
         tabbedPane.addTab("Cadastrar Pessoas", null, tabCadastroPessoa, null);
@@ -135,6 +181,9 @@ public class Interface {
         JButton btnCadastroPessoa = new JButton("Cadastrar");
         btnCadastroPessoa.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		
+        		personView.addPerson(tfNomePessoa.getText(), tfSobrenome.getText());        				
+        				
         	}
         });
         btnCadastroPessoa.setBounds(288, 31, 101, 23);
@@ -153,21 +202,26 @@ public class Interface {
 		tfConsultarNome.setBounds(120, 23, 160, 20);
 		tabConsultaPessoa.add(tfConsultarNome);
 		tfConsultarNome.setColumns(10);
-		
-		JButton btnConsultarPessoa = new JButton("Consultar");
-		btnConsultarPessoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnConsultarPessoa.setBounds(326, 22, 100, 23);
-		tabConsultaPessoa.add(btnConsultarPessoa);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 66, 449, 238);
 		tabConsultaPessoa.add(scrollPane);
 		
 		JTextPane textPaneConsultaPessoa = new JTextPane();
 		scrollPane.setViewportView(textPaneConsultaPessoa);
+		
+		JButton btnConsultarPessoa = new JButton("Consultar");
+		btnConsultarPessoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				textPaneConsultaPessoa.setText(roomView.getPerson(tfConsultarNome.getText()));
+				
+				
+			}
+		});
+		btnConsultarPessoa.setBounds(326, 22, 100, 23);
+		tabConsultaPessoa.add(btnConsultarPessoa);
+		
+		
 
 		JLayeredPane paneConsultaSalas = new JLayeredPane();
 		paneConsultaSalas.setForeground(new Color(255, 255, 255));
@@ -182,20 +236,39 @@ public class Interface {
 		paneConsultaSalas.add(tfConsultaSala);
 		tfConsultaSala.setColumns(10);
 		
-		JButton btnConsultaSala = new JButton("Consultar");
-		btnConsultaSala.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnConsultaSala.setBounds(339, 28, 89, 23);
-		paneConsultaSalas.add(btnConsultaSala);
-		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 77, 449, 227);
 		paneConsultaSalas.add(scrollPane_1);
 		
 		JTextPane textPaneConsultaSala = new JTextPane();
 		scrollPane_1.setViewportView(textPaneConsultaSala);
+		
+		JButton btnConsultaSala = new JButton("Consultar");
+		btnConsultaSala.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				textPaneConsultaSala.setText(roomView.getRoom(tfConsultaSala.getText()));
+				
+			}
+		});
+		btnConsultaSala.setBounds(339, 28, 89, 23);
+		paneConsultaSalas.add(btnConsultaSala);
+		
+		JLayeredPane tabOrganizarPessoas = new JLayeredPane();
+		tabbedPane.addTab("Organizar Pessoas", null, tabOrganizarPessoas, null);
+		
+		JButton btnOrganizar = new JButton("Organizar");
+		btnOrganizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				EventManager eventManager = new EventManager(personView, roomView);
+				
+			}
+		});
+		btnOrganizar.setBounds(190, 54, 105, 23);
+		tabOrganizarPessoas.add(btnOrganizar);
+		
+		
 
 
 	}

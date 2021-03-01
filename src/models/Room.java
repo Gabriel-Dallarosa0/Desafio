@@ -2,72 +2,67 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import exceptions.UnprocessableEntity;
-
+// está classe é o modelo para as salas
 public class Room {
 
-	private int id, capacity;
-	private String name;
+	private int id;
+	private String name, type;
 
-	protected ArrayList<PersonModel> occupation = new ArrayList<PersonModel>();
+	protected HashMap<String, ArrayList<PersonModel>> periods = new HashMap<String, ArrayList<PersonModel>>();
 
-	public Room(int id, String name, int capacity) {
+	// método construtor das salas
+	public Room(int id, String name) {
 		this.setId(id);
 		this.setName(name);
-		this.setCapacity(capacity);
 
 	}
 
-	public int getCapacity() {
-		return capacity;
+	// método get dos tipos das salas
+	public String getType() {
+		return type;
 	}
 
-	public void setCapacity(int capacity) {
-		if (capacity < 0) {
-			throw new NullPointerException("A capacidade não pode ser menor que 0!");
-		} else {
-			this.capacity = capacity;
-		}
-		
+	// método set dos tipos das salas
+	public void setType(String type) {
+		this.type = type;
 	}
 
+	// método get do ID das salas
 	public int getId() {
 		return id;
 	}
-
+ 
+	// método set do ID das salas
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	// método get do nome das salas
 	public String getName() {
 		return name;
 	}
 
+	// método set do nome das salas
 	public void setName(String name) {
 		if (name.equals("") || name == null) {
 			throw new NullPointerException("O nome não pode ser nulo!");
 		} else {
 			this.name = name;
 		}
-		
-	}
-
-	public ArrayList<PersonModel> getOccupation() {
-		return occupation;
-	}
-
-	
-	public void addOccupation(PersonModel person) throws UnprocessableEntity {
-		if (this.occupation.size() < capacity) {
-
-			this.occupation.add(person);
-
-		} else {
-			throw new UnprocessableEntity("Sala cheia!");
-		}
 
 	}
 
+	// método get das pessoas
+	public HashMap<String, ArrayList<PersonModel>> getPersons() {
+		return this.periods;
+	}
+
+	// método add pessoas
+	public void addPerson(PersonModel p, String periods) {
+		this.periods.get(periods).add(p);
+	}
 
 }
